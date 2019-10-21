@@ -1,0 +1,34 @@
+#!/bin/bash
+
+MPIRUN=$(which mpirun)
+# MPIOPTS='--mca btl ib,tcp,self --mca btl_tcp_if_include br0:0 --mca oob_tcp_if_include br0'
+# MPIOPTS='-mca orte_base_help_aggregate 0'
+cp HPL.dat_16 HPL.dat
+echo Using mpi $MPIRUN
+export BIN=./run_hpl
+$MPIRUN --oversubscribe $MPIOPTS \
+    -host e5 -n 1 ./$BIN 0 : \
+    -host e5 -n 1 ./$BIN 1 : \
+    -host e5 -n 1 ./$BIN 2 : \
+    -host e5 -n 1 ./$BIN 3 : \
+    -host e5 -n 1 ./$BIN 4 : \
+    -host e5 -n 1 ./$BIN 5 : \
+    -host e5 -n 1 ./$BIN 6 : \
+    -host e5 -n 1 ./$BIN 7 : \
+    -host e8 -n 1 ./$BIN 0 : \
+    -host e8 -n 1 ./$BIN 1 : \
+    -host e8 -n 1 ./$BIN 2 : \
+    -host e8 -n 1 ./$BIN 3 : \
+    -host e8 -n 1 ./$BIN 4 : \
+    -host e8 -n 1 ./$BIN 5 : \
+    -host e8 -n 1 ./$BIN 6 : \
+    -host e8 -n 1 ./$BIN 7 \
+	2>&1 | tee process.log
+	# 2>&1 | tee 
+cp process.log test_$(date +%H%M%S).log
+echo "ALL DONE" >>process.log
+echo "ALL DONE" >>process.log
+echo "ALL DONE" >>process.log
+echo "ALL DONE" >process.log
+echo "ALL DONE" >process.log
+echo "ALL DONE" >process.log

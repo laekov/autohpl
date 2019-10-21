@@ -1,0 +1,23 @@
+#!/bin/bash
+source /etc/profile.d/modules.sh
+source /opt/spack/share/spack/setup-env.sh
+spack load openmpi@3.1/gaonqs4
+spack load cuda@10%gcc@6.3.0
+export TEST_SYSTEM_PARAMS=0
+
+export CUDA_VISIBLE_DEVICES=$1
+
+case $1 in
+	0|1|2|3)
+		export socket=0
+		;;
+	4|5|6|7)
+		export socket=1
+		;;
+esac
+
+export MAGIC_TH=6
+
+export OMP_NUM_THREADS=$MAGIC_TH 
+export MKL_NUM_THREADS=$MAGIC_TH
+numactl --cpunodebind=$socket -m $socket ./xhpl_cuda-10.0-dyn_mkl-static_ompi-3.1.0_gcc4.8.5_9-26-18
